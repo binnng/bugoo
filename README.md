@@ -10,6 +10,9 @@
 * ie6+ 及 各种现代浏览器
 * 移动端浏览器
 
+###Demo
+[**bugoo.js**](http://laopopo.me/bugoo/index.html)
+
 ## 文档
 
 ### 示例
