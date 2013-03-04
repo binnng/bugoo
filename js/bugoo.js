@@ -4,11 +4,11 @@
  *@demo 
  *var audio = new Bugoo({
  *  media: 'a.mp3',
- *  swfPath: 'a/swf/player.swf',
+ *  swfFile: 'a/swf/player.swf',
  *  duration: 280,
  *  start: function() {},
  *  loading: function() {},
- *  end: function() {}
+ *  stop: function() {}
  *});
  */
 
