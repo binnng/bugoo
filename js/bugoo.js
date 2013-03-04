@@ -62,9 +62,6 @@ var Bugoo = function(window, undefined) {
 		//是否可以播放mp3
 		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mp3') ),
 
-		//stop
-		stop,
-
 		//是否用flash播放，待改进
 		/*playByFlash = !('ontouchstart' in window) 
 					&& document.documentMode != 10 
