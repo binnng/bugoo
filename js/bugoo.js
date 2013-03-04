@@ -12,7 +12,7 @@
  *});
  */
 
-var Bugoo = function(window, undefined) {
+var Bugoo = Bugoo || function(window, undefined) {
 
 	//是否支持Flash
 	function hasFlash() {
@@ -61,12 +61,6 @@ var Bugoo = function(window, undefined) {
 
 		//是否可以播放mp3
 		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mp3') ),
-
-		//是否用flash播放，待改进
-		/*playByFlash = !('ontouchstart' in window) 
-					&& document.documentMode != 10 
-					&& document.documentMode != 9 
-					&& hasFlash(),*/
 
 		//放置flash代码的元素
 		bugooFlashElement,
@@ -191,4 +185,4 @@ var Bugoo = function(window, undefined) {
 
 	return bugoo;
 
-}(window);
+}(this);
