@@ -11,7 +11,7 @@
 * 移动端浏览器
 
 ###Demo
-[**bugoo.js**](http://laopopo.me/bugoo/index.html)
+[**bugoo.js**](http://laopopo.me/demo/bugoo/index.html)
 
 ## 文档
 
