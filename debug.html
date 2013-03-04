@@ -1,0 +1,80 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8" />
+	<script type="text/javascript" src="js/bugoo.js"></script>
+	<style type="text/css">
+		body{margin:0;padding:18px 0;}
+		#progress{
+			position: absolute;
+			top:0;
+			width: 0px;
+			height: 4px;
+			background: #f33;
+		}
+	</style>
+</head>
+<body>
+	<i id="progress"></i>
+	<button id="start">播放</button>
+	<button id="stop">停止</button>
+
+	<p id="p"></p>
+
+	<script type="text/javascript">
+
+		function $(id) {
+			return document.getElementById(id);
+		}
+
+		var progress = $('progress'), start = $('start'), stop = $('stop'), audio;
+			
+		audio = new Bugoo({
+			media: 'media/ygr.mp3',
+			swfFile: 'flash/player.swf',
+			duration: 243,
+			start:function() {
+				//code
+			},
+			loading: function() {
+				//code
+			},
+			timeupdate: function() {
+				progress.style.width = this.currentTime/this.duration * 100 + '%';
+				
+				//$('p').innerHTML = $('p').innerHTML + '<br/>' + this.status;
+			},
+			stop: function() {
+				progress.style.width = 0 + 'px';
+			}
+		}).play();
+
+
+		start.onclick = function() {
+			
+			audio = new Bugoo({
+				media: 'media/xlaq.mp3',
+				swfFile: 'flash/player.swf',
+				duration: 287,
+				loading: function() {
+					console.log(this.status);
+				},
+				timeupdate: function() {
+					progress.style.width = this.currentTime/this.duration * 100 + '%';
+					console.log(this.status);
+				},
+				stop: function() {
+					progress.style.width = 0 + 'px';
+					console.log(this.status);
+				}
+			}).play();			
+
+		};
+
+		stop.onclick = function() {
+			audio.stop();
+		}
+
+
+	</script>
+</body>
+</html>
