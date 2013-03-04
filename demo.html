@@ -33,15 +33,15 @@
 				swfFile: 'flash/player.swf',
 				duration: 243,
 				loading: function() {
-					console.log(this.status);
+					//console.log(this.status);
 				},
 				timeupdate: function() {
 					progress.style.width = this.currentTime/this.duration * 100 + '%';
-					console.log(this.status);
+					//console.log(this.status);
 				},
 				stop: function() {
 					progress.style.width = 0 + 'px';
-					console.log(this.status);
+					//console.log(this.status);
 				}
 			}).play();			
 
