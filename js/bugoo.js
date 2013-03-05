@@ -14,31 +14,7 @@
 
 var Bugoo = Bugoo || function(window, undefined) {
 
-	//是否支持Flash
-	function hasFlash() {
-		var bool = false;
-		if(navigator.plugins && navigator.plugins.length){
-			var l = navigator.plugins.length;
-		  	while(l--){
-		   		if(navigator.plugins[l].name.indexOf('Shockwave Flash')!=-1){
-		    		bool=true;
-		    		break;
-		    	}
-		 	}
-		}else if(window.ActiveXObject){
-		  for (var i=10;i>=2;i--){
-		    try{   
-		      var t=eval("new ActiveXObject('ShockwaveFlash.ShockwaveFlash." + i + "');");
-		      if(t){
-		      	bool=true;
-		      	break;
-		      }
-		    }
-		    catch(e) {}
-		  }
-		}
-		return bool;
-	}
+	"use strict";
 
 	//flash Object对象的方法，注册到window
 	window.getTime = function () {
@@ -62,9 +38,6 @@ var Bugoo = Bugoo || function(window, undefined) {
 		//是否可以播放mp3
 		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mp3') ),
 
-		//放置flash代码的元素
-		bugooFlashElement,
-		flashHTML,
 		timer,
 
 		//空函数，省去判断函数有没有再去执行的判断
@@ -74,15 +47,14 @@ var Bugoo = Bugoo || function(window, undefined) {
 
 		audio = undefined;
 
-		bugooFlashElement = document.createElement('div');
-		flashHTML = '<object id="mkk" name="mkk" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="1"  height="0" ><param name="allowScriptAccess" value="always" /><param name="movie" value="{swfFile}?audioUrl={audioUrl}" /><param name="quality" value="high" /><embed id="mkk" name="mkk" src="{swfFile}?audioUrl={audioUrl}" allowScriptAccess="sameDomain" allowFullScreen="true"  FlashVars=""  quality="high"  width="1"  height="1"  align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';				
+		//放置flash代码的元素
+		var bugooFlashElement = document.createElement('div'),
+			flashHTML = '<object id="mkk" name="mkk" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="1"  height="0" ><param name="allowScriptAccess" value="always" /><param name="movie" value="{swfFile}?audioUrl={audioUrl}" /><param name="quality" value="high" /><embed id="mkk" name="mkk" src="{swfFile}?audioUrl={audioUrl}" allowScriptAccess="sameDomain" allowFullScreen="true"  FlashVars=""  quality="high"  width="1"  height="1"  align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';				
+		
 		bugooFlashElement.setAttribute('style', "height:0;overflow:hidden");
 
 		body.appendChild(bugooFlashElement);
 
-	} else {
-		delete bugooFlashElement;
-		delete flashHTML;
 	}
 
 	var bugoo = function(conf) {
