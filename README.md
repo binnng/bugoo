@@ -22,7 +22,7 @@
 var sound = new Bugoo({
     media: 'sound.mp3', //音频文件的地址（必须）
     swfFile: 'player.swf', //flash文件的地址，不支持audio api的浏览器使用（必须）
-    duration: 60, //音频的时长，以s为单位（必须）
+    duration: 60, //音频的时长，以s为单位（需要用到时长时必须）
     loading: function() {
       //加载时执行的方法
     },
