@@ -36,7 +36,7 @@ var Bugoo = Bugoo || function(window, undefined) {
 		audio = document.createElement('audio'),
 
 		//是否可以播放mp3
-		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mp3') ),
+		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mpeg') ),
 
 		timer,
 
