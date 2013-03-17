@@ -68,14 +68,6 @@ var Bugoo = Bugoo || function(window, undefined) {
 		this.loadingFn    = conf.loading    || emptyFn;
 		this.timeupdateFn = conf.timeupdate || emptyFn;
 		this.stopFn       = conf.stop       || emptyFn;
-
-		//一个页面只有一个实例
-		if ( 'bugooUniqueInstance' in window ) {
-			window.bugooUniqueInstance.stop();
-		} else {
-			window.bugooUniqueInstance = this;
-		}
-
 	};
 
 	bugoo.prototype.play = function() {
@@ -141,6 +133,8 @@ var Bugoo = Bugoo || function(window, undefined) {
 		var that = this;
 
 		if (audio) {
+			/* 重新定义，为的是快速解绑事件 */
+			audio = document.createElement('audio');
 			audio.src = audio.currentSrc;
 		} else {
 			bugooFlashElement.innerHTML = '';
