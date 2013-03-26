@@ -22,6 +22,7 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 		emptyFn = function(){};
 
 	if ( !canPlayMp3 ) {
+		
 		audio = undefined;
 
 		//放置flash代码的元素
