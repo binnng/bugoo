@@ -9,11 +9,6 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 
 	"use strict";
 
-	//flash Object对象的方法，注册到window
-	window.getTime = function () {
-		return window.bugooFlashObj.getTime();
-	}
-
 	var body = document.body || document.getElementsByTagName('html')[0],
 
 		audio = document.createElement('audio'),
@@ -102,9 +97,14 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 			return flashObj;
 		})();
 
+		//flash Object对象的方法，注册到window
+		var getTime = function () {
+			return window.bugooFlashObj.getTime();
+		}
+
 		timer = setInterval(function() {
 
-			if ( !window.getTime() ) {
+			if ( !getTime() ) {
 				that.status = 'loading';
 				that.loadingFn();
 			} else {
@@ -115,11 +115,11 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 				that.timeupdateFn();
 			}					
 
-			if(window.getTime() === 100) {
+			if(getTime() === 100) {
 				that.stop();
 			}
 
-			that.currentTime = window.getTime() * that.duration / 100;
+			that.currentTime = getTime() * that.duration / 100;
 
 		}, 30);
 
