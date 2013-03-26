@@ -102,11 +102,6 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 			return flashObj;
 		})();
 
-		//flash Object对象的方法，注册到window
-		var getTime = function () {
-			return window.bugooFlashObj.getTime();
-		}
-
 		timer = setInterval(function() {
 
 			if ( !getTime() ) {
