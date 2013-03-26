@@ -2,17 +2,12 @@
  *音频插件，支持pc和手持设备
  *@time 2013/3/2
  *@author binnng
- *@update 2013/3/26
+ *@update 2013/3/26 更改了swf文件，重新组织了flash播放的代码
  */
 
 var Bugoo = Bugoo || function(window, document, undefined) {
 
 	"use strict";
-
-	//flash Object对象的方法，注册到window
-	window.getTime = function () {
-		return window.bugooFlashObj.getTime();
-	}
 
 	var body = document.body || document.getElementsByTagName('html')[0],
 
@@ -27,7 +22,6 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 		emptyFn = function(){};
 
 	if ( !canPlayMp3 ) {
-
 		audio = undefined;
 
 		//放置flash代码的元素
@@ -37,6 +31,11 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 		bugooFlashElement.setAttribute('style', "height:0;overflow:hidden");
 
 		body.appendChild(bugooFlashElement);
+
+		//flash Object对象的方法
+		var getTime = function () {
+			return window.bugooFlashObj.getTime();
+		}
 
 	}
 
@@ -104,7 +103,7 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 
 		timer = setInterval(function() {
 
-			if ( !window.getTime() ) {
+			if ( !getTime() ) {
 				that.status = 'loading';
 				that.loadingFn();
 			} else {
@@ -115,11 +114,11 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 				that.timeupdateFn();
 			}					
 
-			if(window.getTime() === 100) {
+			if(getTime() === 100) {
 				that.stop();
 			}
 
-			that.currentTime = window.getTime() * that.duration / 100;
+			that.currentTime = getTime() * that.duration / 100;
 
 		}, 30);
 
