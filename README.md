@@ -59,4 +59,4 @@ sound.stop();
 ### 属性
 * **duration**: `Number` 音频的时长（以s为单位）
 * **currentTime**: `Number` 当前播放的进度（以s为单位）
-* **status**: `String` 播放的状态。有`ready`，`loading`，`playing`和`stoped`四个返回值。
+* **status**: `String` 播放的状态。有`ready`，`loading`，`playing`，`stoped`和`ended`四个返回值。
