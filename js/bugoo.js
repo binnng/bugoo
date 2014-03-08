@@ -42,15 +42,15 @@ var Bugoo = function(WIN, DOC, undefined) {
   flashAudioUrl,
   timer,
   /**
-	* 是不是使用H5播放器
-	* 供压缩器使用
-	* 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
-	* @type {Boolean}
-	*/
+  * 是不是使用H5播放器
+  * 供压缩器使用
+  * 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
+  * @type {Boolean}
+  */
   isH5Player = true,
   /**
   * 是否兼容Flash
-  * 同样是供压缩器使用
+  * 同样是供压缩器使用，可以在外部定义
   * @type {Boolean}
   */
   IS_USE_FLASH = true,
