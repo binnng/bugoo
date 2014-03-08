@@ -23,7 +23,6 @@
 var sound = new Bugoo({
     media: 'sound.mp3', //音频文件的地址（必须）
     swfFile: 'player.swf', //flash文件的地址，不支持audio api的浏览器使用（必须）
-    duration: 60, //音频的时长，以s为单位（需要用到时长时必须）
     loading: function() {
       //加载时执行的方法
     },
@@ -43,8 +42,7 @@ var sound = new Bugoo({
 ```javascript
 var sound = new Bugoo({
     media: 'sound.mp3',
-    swfFile: 'player.swf',
-    duration: 60
+    swfFile: 'player.swf'
 }).play();
 ```
 
@@ -60,4 +58,4 @@ sound.stop();
 ### 属性
 * **duration**: `Number` 音频的时长（以s为单位）
 * **currentTime**: `Number` 当前播放的进度（以s为单位）
-* **status**: `String` 播放的状态。有`ready`，`loading`，`playing`，`stoped`和`ended`四个返回值。
+* **status**: `String` 播放的状态。有`ready`，`loading`，`playing`，`paused`(flash没有这个状态)和`ended`四个返回值。
