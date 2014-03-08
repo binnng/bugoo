@@ -13,6 +13,7 @@
 
 ###Demo
 [**bugoo.js**](http://laopopo.sinaapp.com/demo/bugoo/index.html)
+[**fm**](http://laopopo.duapp.com/fm)
 
 ## 文档
 

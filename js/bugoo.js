@@ -15,24 +15,6 @@
 
 var Bugoo = function(WIN, DOC, undefined) {
 
-  /* flash Object对象的方法，需要注册到window */
-  var getTime = function() {
-
-    var flashObj = WIN['mkk'] || DOC['mkk'],
-    time = 0;
-
-    if (flashObj && (flashObj.getTime || (flashObj = flashObj[1]) && flashObj.getTime)) {
-      time = flashObj.getTime();
-      if (isNaN(time)) {
-        time = 0;
-      }
-    }
-
-    return time;
-  };
-
-  WIN['getTime'] = getTime;
-
   var body = DOC.body || DOC.getElementsByTagName('html')[0],
   audio = DOC.createElement('audio'),
   canPlayMp3 = !!(audio.canPlayType && audio.canPlayType('audio/mpeg')),
@@ -42,18 +24,19 @@ var Bugoo = function(WIN, DOC, undefined) {
   flashAudioUrl,
   timer,
   /**
-  * 是不是使用H5播放器
-  * 供压缩器使用
-  * 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
-  * @type {Boolean}
-  */
-  isH5Player = true,
-  /**
   * 是否兼容Flash
   * 同样是供压缩器使用，可以在外部定义
   * @type {Boolean}
   */
   IS_USE_FLASH = true,
+  /**
+  * 是不是使用H5播放器
+  * 供压缩器使用
+  * 如果定义了IS_USE_FLASH为false，这个值会被设为false
+  * 当这个值为false时压缩器会过滤掉所有Flash相关代码
+  * @type {Boolean}
+  */
+  isH5Player = true,
   emptyFn = function() {};
 
   if (!canPlayMp3 && !IS_USE_FLASH) {
@@ -61,6 +44,24 @@ var Bugoo = function(WIN, DOC, undefined) {
   }
 
   if (IS_USE_FLASH && !canPlayMp3) {
+
+    /* flash Object对象的方法，需要注册到window */
+    var getTime = function() {
+
+      var flashObj = WIN['mkk'] || DOC['mkk'],
+        time = 0;
+
+      if (flashObj && (flashObj.getTime || (flashObj = flashObj[1]) && flashObj.getTime)) {
+        time = flashObj.getTime();
+        if (isNaN(time)) {
+          time = 0;
+        }
+      }
+
+      return time;
+    };
+
+    WIN['getTime'] = getTime;
 
     audio = null;
     isH5Player = false;
