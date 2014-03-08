@@ -1,38 +1,85 @@
 /*
- *音频插件，支持pc和手持设备
- *@time 2013/3/2
- *@author binnng
- *@update 2013/4/8 增加ended状态
+ *音频插件，支持pc和手持设备，一个页面只允许一个音频
+ *@time 2013/30/02
+ *@update 2014/03/08
+ *@demo
+ *var audio = new Bugoo({
+ *  media: 'a.mp3',
+ *  swfPath: 'a/swf/player.swf',
+ *  duration: 280,
+ *  start: function() {},
+ *  loading: function() {},
+ *  end: function() {}
+ *});
  */
 
-var Bugoo = Bugoo || function(window, document, undefined) {
+var Bugoo = function(WIN, DOC, undefined) {
 
-	var body = document.body || document.getElementsByTagName('html')[0],
+	//flash Object对象的方法，需要注册到window
+	var getTime = function() {
 
-		audio = document.createElement('audio'),
+		var flashObj = WIN['mkk'] || DOC['mkk'],
+			time = 0;
 
-		//是否可以播放mp3
-		canPlayMp3 = !! ( audio.canPlayType && audio.canPlayType('audio/mpeg') ),
+		if (flashObj && (flashObj.getTime || (flashObj = flashObj[1]) && flashObj.getTime)) {
+			time = flashObj.getTime();
+			if (isNaN(time)) {
+				time = 0;
+			}
+		}
 
-		//播放器的计时器
+		return time;
+	};
+
+	WIN['getTime'] = getTime;
+
+	var body = DOC.body || DOC.getElementsByTagName('html')[0],
+		audio = DOC.createElement('audio'),
+		canPlayMp3 = !! (audio.canPlayType && audio.canPlayType('audio/mpeg')),
+		bugooFlashElement,
+		flashHTML,
+		flashSwfFile,
+		flashAudioUrl,
 		timer,
+		/**
+		 * 是不是使用H5播放器
+		 * 供压缩器使用
+		 * 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
+		 * @type {Boolean}
+		 */
+		isH5Player = true,
+		/**
+		 * 是否兼容Flash
+		 * 同样是供压缩器使用
+		 * @type {Boolean}
+		 */
+		IS_USE_FLASH = true,
+		emptyFn = function() {};
 
-		//flash音频播放当前进度
-		curFlashProgress = 0,
+	if (!canPlayMp3 && !IS_USE_FLASH) {
+		return console.log('oh, I cant play in so low browser!');
+	}
 
-		//空函数，省去判断函数有没有再去执行的判断
-		emptyFn = function(){};
+	if (IS_USE_FLASH && !canPlayMp3) {
 
-	if ( !canPlayMp3 ) {
-		
-		audio = undefined;
+		audio = null;
+		isH5Player = false;
 
-		//放置flash代码的元素
-		var bugooFlashElement = document.createElement('div'),
-			bugooFlashHTML = '<object id="mkk" name="mkk" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="1"  height="0" ><param name="allowScriptAccess" value="always" /><param id="mkkp" name="movie" value="{mkkp}" /><param name="quality" value="high" /><embed id="mkkc" name="mkkc" src="" allowScriptAccess="sameDomain" allowFullScreen="true"  FlashVars=""  quality="high"  width="1"  height="1"  align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
-		
+		bugooFlashElement = DOC.createElement('div');
+		flashHTML = [
+			'<object id="mkk" name="mkk" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="1"  height="0" >',
+			'<param name="allowScriptAccess" value="always" /><param name="movie" value="',
+			flashSwfFile,
+			'?audioUrl=',
+			flashAudioUrl,
+			'" /><param name="quality" value="high" />',
+			'<embed id="mkk" name="mkk" src="',
+			flashSwfFile,
+			'?audioUrl=',
+			flashAudioUrl,
+			'" allowScriptAccess="sameDomain" allowFullScreen="true" FlashVars="" quality="high" width="1" height="1" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>'
+		];
 		bugooFlashElement.setAttribute('style', "height:0;overflow:hidden");
-		bugooFlashElement.innerHTML = bugooFlashHTML;
 
 		body.appendChild(bugooFlashElement);
 
@@ -40,45 +87,43 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 
 	var bugoo = function(conf) {
 
-		this.media        = conf.media;
-		this.swfFile      = conf.swfFile;
-		this.currentTime  = 0;
-		this.duration     = conf.duration;
-		this.status       = 'ready';
-		this.volume       = conf.volume     || 0.6;
-		this.startFn      = conf.start      || emptyFn;
-		this.loadingFn    = conf.loading    || emptyFn;
+		this.media = conf.media;
+		this.swfFile = conf.swfFile;
+		this.currentTime = 0;
+		this.duration = conf.duration;
+		this.status = 'ready';
+		this.startFn = conf.start || emptyFn;
+		this.loadingFn = conf.loading || emptyFn;
 		this.timeupdateFn = conf.timeupdate || emptyFn;
-		this.stopFn       = conf.stop       || emptyFn;
+		this.stopFn = conf.stop || emptyFn;
+		this.pauseFn = conf.pause || emptyFn;
+
+		if ('bugooUniqueInstance' in WIN) {
+			WIN.bugooUniqueInstance.stop();
+		} else {
+			WIN.bugooUniqueInstance = this;
+		}
+
 	};
 
-	bugoo.prototype.play = audio ? function() {
-
+	bugoo.prototype.play = isH5Player ? function() {
 		var that = this;
-		/**重新定义audio
-		 *1）快速解绑事件
-		 *2）低端安卓机创建一个audio元素后，即使修改了src，但播放的音频也不会修改
-		*/		
-		audio.pause();
-		audio = document.createElement('audio');
-		audio.src = that.media;
+
+		if (that.status != 'paused') {
+			audio.src = that.media;
+		}
 
 		audio.play();
 
+		audio.addEventListener('play', that.startFn);
 		audio.addEventListener('playing', function() {
 			that.status = 'playing';
-			audio.volume = that.volume;
-			that.startFn();
 		});
 		audio.addEventListener('waiting', function() {
 			that.status = 'loading';
 			that.loadingFn();
 		});
-		/*
-		 *不能这么写
-		 *audio.addEventListener('ended',that.stop);
-		 *这样会改变stop里的this指向
-		 */
+
 		audio.addEventListener('ended', function() {
 			that.stop();
 		});
@@ -86,94 +131,74 @@ var Bugoo = Bugoo || function(window, document, undefined) {
 		timer = setInterval(function() {
 
 			that.currentTime = audio.currentTime;
-
 			that.timeupdateFn();
 
 		}, 30);
 
 		return that;
 	} : function() {
-		var that = this,
 
-		getTime = function() {
-			var flashObj = window.mkk || document.mkk;
-
-			if (!flashObj.getTime) {
-				return;
-			}
-
-			flashObj.getTime || (flashObj = flashObj[1]);
-
-			return flashObj.getTime();
-		};
-
-		document.all ? 
-		bugooFlashElement.innerHTML = bugooFlashHTML.replace('{mkkp}', '/swf/player.swf?audioUrl=' + that.media) : 
-		window.mkkc.src = '/swf/player.swf?audioUrl=' + that.media;
-
+		flashSwfFile = that.swfFile
+		flashAudioUrl = that.media
+		bugooFlashElement.innerHTML = flashHTML.join('');
 		timer = setInterval(function() {
 
-			curFlashProgress = getTime();
-
-			if ( !curFlashProgress ) {
+			if (0 === getTime() || isNaN(getTime())) {
 				that.status = 'loading';
 				that.loadingFn();
 			} else {
 				that.startFn && that.startFn();
-				//startFn 只触发一次
 				delete that.startFn;
 				that.status = 'playing';
 				that.timeupdateFn();
-			}					
+			}
 
-			if(curFlashProgress === 100) {
+			if (getTime() === 100) {
 				that.stop();
 			}
 
-			that.currentTime = curFlashProgress * that.duration / 100;
+			that.currentTime = getTime() * that.duration / 100;
 
 		}, 30);
 
 		return that;
 	};
 
-
 	bugoo.prototype.stop = function() {
 		var that = this;
 
-		if (audio) {
-
-			if ( audio.ended ) {
-				that.status = 'ended';
-			} else {
-				that.status = 'stoped';
-			}
-			/**
-			 * 暂停并恢复从开始播放
-			 */
-			audio.pause();
-			audio.currentTime = 0;
-			/**
-			 * 如果audio.currentTime = 0不起作用
-			 * 更改src可以达到停止并恢复从0播放的效果
-			 */
-			if ( 0 !== audio.currentTime ) {
-				audio.src = '';
-			}
+		if (isH5Player) {
+			audio.src = audio.currentSrc;
 		} else {
-			document.all ? bugooFlashElement.innerHTML = '' : window.mkkc.src = '';
-			that.status = curFlashProgress === 100 ? 'ended' : 'stoped';
-
-			curFlashProgress = 0;
+			bugooFlashElement.innerHTML = '';
 		}
 
-		clearInterval(timer);		
+		clearInterval(timer);
+
+		that.status = 'stoped';
 
 		that.stopFn();
 
 		return that;
 	};
 
+	bugoo.prototype.pause = function() {
+		var that = this;
+
+		if (isH5Player) {
+			audio.pause();
+			that.status = 'paused';
+		} else {
+			that.stop();
+			that.status = 'stoped';
+		}
+
+		that.pauseFn();
+
+		return that;
+
+	}
+
 	return bugoo;
 
-}(this, document);
+}(window, document);
