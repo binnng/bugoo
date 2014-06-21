@@ -5,8 +5,7 @@
  *@demo
  *var audio = new Bugoo({
  *  media: 'a.mp3',
- *  swfPath: 'a/swf/player.swf',
- *  duration: 280,
+ *  swfFile: 'a/swf/player.swf',
  *  start: function() {},
  *  loading: function() {},
  *  end: function() {}
