@@ -12,8 +12,7 @@
 * 移动端浏览器
 
 ###Demo
-[**bugoo.js**](http://laopopo.sinaapp.com/demo/bugoo/index.html)
-[**fm**](http://laopopo.duapp.com/fm)
+[**fm**](http://binnng.github.io/fm/)
 
 ## 文档
 
