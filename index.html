@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Bugoo by binnng</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/binnng/bugoo">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Bugoo</h1>
+            <h2>An audio library for the pc and mobile web</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/binnng/bugoo/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/binnng/bugoo/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h2>
+<a name="%E6%8F%8F%E8%BF%B0" class="anchor" href="#%E6%8F%8F%E8%BF%B0"><span class="octicon octicon-link"></span></a>描述</h2>
+
+<p><strong>bugoo.js</strong> 是一个适用于pc和mobile浏览器的音频播放类库。</p>
+
+<h3>
+<a name="%E7%89%B9%E6%80%A7" class="anchor" href="#%E7%89%B9%E6%80%A7"><span class="octicon octicon-link"></span></a>特性</h3>
+
+<ul>
+<li>暂且只支持mp3音频（其他音频也可放，但不保证质量）</li>
+<li>支持HTML5的audio接口使用HTML5播放</li>
+<li>一个页面不能同时播放两个音频</li>
+<li>不依赖任何前端类库</li>
+</ul><h3>
+<a name="%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81" class="anchor" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81"><span class="octicon octicon-link"></span></a>浏览器支持</h3>
+
+<ul>
+<li>ie6++ 及 各种现代浏览器</li>
+<li>移动端浏览器</li>
+</ul><h3>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h3>
+
+<p><a href="http://binnng.github.io/fm/"><strong>fm</strong></a></p>
+
+<h2>
+<a name="%E6%96%87%E6%A1%A3" class="anchor" href="#%E6%96%87%E6%A1%A3"><span class="octicon octicon-link"></span></a>文档</h2>
+
+<h3>
+<a name="%E7%A4%BA%E4%BE%8B" class="anchor" href="#%E7%A4%BA%E4%BE%8B"><span class="octicon octicon-link"></span></a>示例</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">sound</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bugoo</span><span class="p">({</span>
+    <span class="nx">media</span><span class="o">:</span> <span class="s1">'sound.mp3'</span><span class="p">,</span> <span class="c1">//音频文件的地址（必须）</span>
+    <span class="nx">swfFile</span><span class="o">:</span> <span class="s1">'player.swf'</span><span class="p">,</span> <span class="c1">//flash文件的地址，不支持audio api的浏览器使用（必须）</span>
+    <span class="nx">loading</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">//加载时执行的方法</span>
+    <span class="p">},</span>
+    <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">//开始播放时执行的方法</span>
+    <span class="p">},</span>
+    <span class="nx">timeupdate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">//播放过程中执行的方法</span>
+    <span class="p">},</span>
+    <span class="nx">stop</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">//停止时执行的方法</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h5>
+<a name="%E7%AB%8B%E5%8D%B3%E6%92%AD%E6%94%BE" class="anchor" href="#%E7%AB%8B%E5%8D%B3%E6%92%AD%E6%94%BE"><span class="octicon octicon-link"></span></a>立即播放:</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">sound</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bugoo</span><span class="p">({</span>
+    <span class="nx">media</span><span class="o">:</span> <span class="s1">'sound.mp3'</span><span class="p">,</span>
+    <span class="nx">swfFile</span><span class="o">:</span> <span class="s1">'player.swf'</span>
+<span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+</pre></div>
+
+<h5>
+<a name="%E6%92%AD%E6%94%BE" class="anchor" href="#%E6%92%AD%E6%94%BE"><span class="octicon octicon-link"></span></a>播放</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">sound</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+</pre></div>
+
+<h5>
+<a name="%E5%81%9C%E6%AD%A2" class="anchor" href="#%E5%81%9C%E6%AD%A2"><span class="octicon octicon-link"></span></a>停止</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">sound</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="%E5%B1%9E%E6%80%A7" class="anchor" href="#%E5%B1%9E%E6%80%A7"><span class="octicon octicon-link"></span></a>属性</h3>
+
+<ul>
+<li>
+<strong>duration</strong>: <code>Number</code> 音频的时长（以s为单位）</li>
+<li>
+<strong>currentTime</strong>: <code>Number</code> 当前播放的进度（以s为单位）</li>
+<li>
+<strong>status</strong>: <code>String</code> 播放的状态。有<code>ready</code>，<code>loading</code>，<code>playing</code>，<code>paused</code>(flash没有这个状态)和<code>ended</code>四个返回值。</li>
+</ul>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/binnng">binnng</a> can be found on <a href="https://github.com/binnng/bugoo">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
