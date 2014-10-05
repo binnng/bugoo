@@ -1,0 +1,15 @@
+{
+  "name": "BugooFm",
+  "version": "0.2.0",
+  "description": "借助bugoo.js写的私人电台。",
+  "keywords": [
+    "bugoo.js",
+    "bugoo",
+    "fm"
+  ],
+  "dependencies": {
+    "docco": "~0.6.3",
+    "uglifyjs": "~2.3.6",
+    "clean-css": "~2.2.16"
+  }
+}
