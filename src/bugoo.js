@@ -1,16 +1,9 @@
-/*
- *音频插件，支持pc和手持设备，一个页面只允许一个音频
- *@time 2013/30/02
- *@update 2014/03/08
- *@demo
- *var audio = new Bugoo({
- *  media: 'a.mp3',
- *  swfFile: 'a/swf/player.swf',
- *  start: function() {},
- *  loading: function() {},
- *  end: function() {}
- *});
- */
+// ```
+// Bugoo.js
+// 音频插件，支持pc和手持设备
+// 一个页面只允许一个音频
+// author: imbinnng@gmail.com
+// ```
 
 var Bugoo = function(WIN, DOC, undefined) {
 
@@ -18,7 +11,7 @@ var Bugoo = function(WIN, DOC, undefined) {
 
   var body = DOC.body || DOC.getElementsByTagName('html')[0],
     audio = DOC.createElement('audio'),
-    canPlayMp3 = !! (audio.canPlayType && audio.canPlayType('audio/mpeg')),
+    canPlayMp3 = !!(audio.canPlayType && audio.canPlayType('audio/mpeg')),
 
     bugooFlashElement,
     flashHTML,
@@ -26,18 +19,20 @@ var Bugoo = function(WIN, DOC, undefined) {
     flashAudioUrl,
     flashTimer,
     getFlashTime,
-    /**
-    * 是否兼容Flash
-    * 同样是供压缩器使用，可以在外部定义
-    * @type {Boolean}
-    */
+
+    //
+    // 是否兼容Flash
+    // 同样是供压缩器使用，可以在外部定义
+    // @type {Boolean}
+    //
     IS_USE_FLASH = true,
-    /**
-     * 是不是使用H5播放器
-     * 供压缩器使用
-     * 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
-     * @type {Boolean}
-     */
+
+    //
+    // 是不是使用H5播放器
+    // 供压缩器使用
+    // 如果定义了IS_USE_FLASH为false，压缩器会过滤掉所有Flash相关代码
+    // @type {Boolean}
+    //
     isH5Player = true,
     bugooUniqueInstance = null,
     noop = function() {};
@@ -48,7 +43,7 @@ var Bugoo = function(WIN, DOC, undefined) {
 
   if (IS_USE_FLASH && !canPlayMp3) {
 
-    /* flash Object对象的方法 */
+    // flash Object对象的方法
     getFlashTime = function() {
 
       var flashObj = WIN['bugooFlash'] || DOC['bugooFlash'],
@@ -95,37 +90,37 @@ var Bugoo = function(WIN, DOC, undefined) {
   };
 
   bugoo.prototype.play = isH5Player ? function() {
-      var that = this;
+    var that = this;
 
-      if (that.status != 'paused') {
-        audio.src = that.media;
-      }
+    if (that.status != 'paused') {
+      audio.src = that.media;
+    }
 
-      audio.addEventListener('play', function() {
-        that.startFn();
-      });
-      audio.addEventListener('playing', function() {
-        that.status = 'playing';
-      });
-      audio.addEventListener('waiting', function() {
-        that.status = 'loading';
-        that.loadingFn();
-      });
+    audio.addEventListener('play', function() {
+      that.startFn();
+    });
+    audio.addEventListener('playing', function() {
+      that.status = 'playing';
+    });
+    audio.addEventListener('waiting', function() {
+      that.status = 'loading';
+      that.loadingFn();
+    });
 
-      audio.addEventListener('ended', function() {
-        that.end();
-        that.status = 'ended';
-      });
+    audio.addEventListener('ended', function() {
+      that.end();
+      that.status = 'ended';
+    });
 
-      audio.addEventListener('timeupdate', function() {
-        that.currentTime = audio.currentTime;
-        that.duration = audio.duration;
-        that.timeupdateFn();
-      });
+    audio.addEventListener('timeupdate', function() {
+      that.currentTime = audio.currentTime;
+      that.duration = audio.duration;
+      that.timeupdateFn();
+    });
 
-      audio.play();
+    audio.play();
 
-      return that;
+    return that;
   } : function() {
     var that = this;
 
@@ -134,21 +129,21 @@ var Bugoo = function(WIN, DOC, undefined) {
     bugooFlashElement.innerHTML = flashHTML.join('');
 
     flashTimer = setInterval(function() {
-        if (0 === getFlashTime() || isNaN(getFlashTime())) {
-          that.status = 'loading';
-          that.loadingFn();
-        } else {
-          that.startFn && that.startFn();
-          delete that.startFn;
-          that.status = 'playing';
-          that.timeupdateFn();
-        }
+      if (0 === getFlashTime() || isNaN(getFlashTime())) {
+        that.status = 'loading';
+        that.loadingFn();
+      } else {
+        that.startFn && that.startFn();
+        delete that.startFn;
+        that.status = 'playing';
+        that.timeupdateFn();
+      }
 
-        if (getFlashTime() === 100) {
-          that.end();
-        }
+      if (getFlashTime() === 100) {
+        that.end();
+      }
 
-        that.currentTime = getFlashTime() * that.duration / 100;
+      that.currentTime = getFlashTime() * that.duration / 100;
     }, 30);
 
     return that;
