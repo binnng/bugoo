@@ -1,0 +1,28 @@
+{
+  "name": "bugoo",
+  "version": "0.0.2",
+  "homepage": "https://github.com/binnng/bugoo",
+  "authors": [
+    "binnng <imbinnng@gmail.com>"
+  ],
+  "description": "bugoo is a html5 audio player",
+  "main": "src/bugoo_light.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "bugoo",
+    "music",
+    "audio"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
