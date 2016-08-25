@@ -1,0 +1,26 @@
+{
+  "name": "bugoo",
+  "version": "0.0.1",
+  "description": "mobile html5 player",
+  "main": "src/bugoo.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binnng/bugoo.git"
+  },
+  "scripts": {
+    "build": "rm -rf build && mkdir build && uglifyjs src/bugoo.js -o build/bugoo.min.js -m"
+  },
+  "keywords": [
+    "debug",
+    "console"
+  ],
+  "author": "imbinnng@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/binnng/bugoo/issues"
+  },
+  "homepage": "https://github.com/binnng/bugoo",
+  "dependencies": {
+    "uglify-js": "^2.4.15"
+  }
+}
